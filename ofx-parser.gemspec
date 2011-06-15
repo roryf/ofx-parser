@@ -23,7 +23,7 @@ ofx-parser is a ruby library to parse a realistic subset of the lengthy OFX 1.x 
 * Supports OFX timestamps.}
   s.email = %q{andy@tinnedfruit.org}
   s.extra_rdoc_files = [%q{History.txt}, %q{Manifest.txt}, %q{README.txt}]
-  s.files = [%q{History.txt}, %q{Manifest.txt}, %q{README.txt}, %q{Rakefile}, %q{lib/class-extension.rb}, %q{lib/mcc.rb}, %q{lib/ofx-parser.rb}, %q{lib/ofx.rb}, %q{test/fixtures/banking.ofx.sgml}, %q{test/fixtures/creditcard.ofx.sgml}, %q{test/fixtures/list.ofx.sgml}, %q{test/fixtures/malformed_header.ofx.sgml}, %q{test/fixtures/with_spaces.ofx.sgml}, %q{test/test_ofx_parser.rb}, %q{.gemtest}]
+  s.files = [%q{History.txt}, %q{Manifest.txt}, %q{README.txt}, %q{Rakefile}, %q{lib/mcc.rb}, %q{lib/ofx-parser.rb}, %q{lib/ofx.rb}, %q{test/fixtures/banking.ofx.sgml}, %q{test/fixtures/creditcard.ofx.sgml}, %q{test/fixtures/list.ofx.sgml}, %q{test/fixtures/malformed_header.ofx.sgml}, %q{test/fixtures/with_spaces.ofx.sgml}, %q{test/test_ofx_parser.rb}, %q{.gemtest}]
   s.homepage = %q{http://ofx-parser.rubyforge.org/}
   s.rdoc_options = [%q{--main}, %q{README.txt}]
   s.require_paths = [%q{lib}]
