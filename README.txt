@@ -72,6 +72,10 @@ Working on investment accounts...
 
 * gem install ofx-parser
 
+== DEVELOPMENT:
+When making new release, remember to update ofx-parser.gemspec, using:
+rake debug_gem > ofx-parser.gemspec
+
 == LICENSE:
 
 Copyright (c) 2007, Andrew A. Smith
