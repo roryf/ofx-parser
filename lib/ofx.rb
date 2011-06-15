@@ -1,11 +1,13 @@
 module OfxParser
   module MonetarySupport
 
-    @@monies ||= []
-
     class_extension do
       def monetary_vars(*methods) #:nodoc:
-        @@monies += methods
+        methods.each do |original_method|
+          define_method "#{original_method}_in_pennies" do
+            pennies_for(send(original_method))
+          end
+        end
       end
     end
 
@@ -17,27 +19,6 @@ module OfxParser
       int, fraction = amount.scan(/\d+/)
       i = (fraction.to_s.strip =~ /[1-9]/) ? "#{int}#{fraction[0,2]}".to_i : int.to_i * 100
       amount =~ /^\s*-\s*\d+/ ? -i : i
-    end
-
-    def original_method(meth) #:nodoc:
-      meth.to_s.sub('_in_pennies','').to_sym rescue nil
-    end
-
-    def monetary_method_call?(meth) #:nodoc:
-      orig = original_method(meth)
-      @@monies.include?(orig) && meth.to_s == "#{orig}_in_pennies"
-    end
-
-    def method_missing(meth, *args) #:nodoc:
-      if (monetary_method_call?(meth))
-        pennies_for(send(original_method(meth)))
-      else
-        super
-      end
-    end
-
-    def respond_to?(meth) #:nodoc:
-      monetary_method_call?(meth) ? true : super
     end
 
   end

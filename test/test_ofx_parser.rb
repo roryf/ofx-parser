@@ -234,12 +234,6 @@ class OfxParserTest < Test::Unit::TestCase
     monetary_vars :amount
   end
 
-  def test_original_method
-    x = X.new
-    assert_equal :a_b, x.original_method('a_b_in_pennies')
-    assert_equal :a, x.original_method('a_in_pennies')
-  end
-
   def test_for_pennies
     amounts = {
       '-11.1' => -111,
