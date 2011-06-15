@@ -1,11 +1,13 @@
 module OfxParser
   module MonetarySupport
 
-    class_extension do
-      def monetary_vars(*methods) #:nodoc:
-        methods.each do |original_method|
-          define_method "#{original_method}_in_pennies" do
-            pennies_for(send(original_method))
+    def self.included(base)
+      base.class_eval do
+        def self.monetary_vars(*methods) #:nodoc:
+          methods.each do |original_method|
+            define_method "#{original_method}_in_pennies" do
+              pennies_for(send(original_method))
+            end
           end
         end
       end
