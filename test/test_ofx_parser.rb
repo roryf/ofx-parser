@@ -15,6 +15,7 @@ class OfxParserTest < Test::Unit::TestCase
     ofx.gsub!(/\r?\n/,"\r\n") # change line endings to \r\n
 
     OFX_FILES[fn.scan(/\w+/).first.to_sym] = ofx
+    OFX_FILES[fn.gsub(/\.ofx\.sgml$/, "").to_sym] = ofx
   end
 
   def setup
@@ -430,15 +431,8 @@ class OfxParserTest < Test::Unit::TestCase
 
   class X
     include OfxParser::MonetarySupport
-    extend OfxParser::MonetaryClassSupport
     attr_accessor :amount
     monetary_vars :amount
-  end
-
-  def test_original_method
-    x = X.new
-    assert_equal :a_b, x.original_method('a_b_in_pennies')
-    assert_equal :a, x.original_method('a_in_pennies')
   end
 
   def test_for_pennies

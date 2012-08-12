@@ -1,15 +1,18 @@
 module OfxParser
-  module MonetaryClassSupport
-
-    attr_accessor :monies
-
-    def monetary_vars(*methods) #:nodoc:
-      self.monies ||= []
-      self.monies += methods
-    end
-  end
-
   module MonetarySupport
+
+    def self.included(base)
+      base.class_eval do
+        def self.monetary_vars(*methods) #:nodoc:
+          methods.each do |original_method|
+            define_method "#{original_method}_in_pennies" do
+              pennies_for(send(original_method))
+            end
+          end
+        end
+      end
+    end
+
     # Returns pennies for a given string amount, i.e:
     #  '-123.45' => -12345
     #  '123' => 12300
@@ -18,27 +21,6 @@ module OfxParser
       int, fraction = amount.scan(/\d+/)
       i = (fraction.to_s.strip =~ /[1-9]/) ? "#{int}#{fraction[0,2]}".to_i : int.to_i * 100
       amount =~ /^\s*-\s*\d+/ ? -i : i
-    end
-
-    def original_method(meth) #:nodoc:
-      meth.to_s.sub('_in_pennies','').to_sym rescue nil
-    end
-
-    def monetary_method_call?(meth) #:nodoc:
-      orig = original_method(meth)
-      self.class.monies.include?(orig) && meth.to_s == "#{orig}_in_pennies"
-    end
-
-    def method_missing(meth, *args) #:nodoc:
-      if (monetary_method_call?(meth))
-        pennies_for(send(original_method(meth)))
-      else
-        super
-      end
-    end
-
-    def respond_to?(meth) #:nodoc:
-      monetary_method_call?(meth) ? true : super
     end
 
   end
@@ -84,7 +66,6 @@ module OfxParser
     attr_accessor :type, :balance, :balance_date
 
     include MonetarySupport
-    extend MonetaryClassSupport
     monetary_vars :balance
 
     undef type
@@ -97,7 +78,6 @@ module OfxParser
     attr_accessor :remaining_credit, :remaining_credit_date, :balance, :balance_date
 
     include MonetarySupport
-    extend MonetaryClassSupport
     monetary_vars :remaining_credit, :balance
   end
 
@@ -105,7 +85,6 @@ module OfxParser
     attr_accessor :broker_id, :positions, :margin_balance, :short_balance, :cash_balance
 
     include MonetarySupport
-    extend MonetaryClassSupport
     monetary_vars :margin_balance, :short_balance, :cash_balance
   end
 
@@ -117,7 +96,6 @@ module OfxParser
     attr_accessor :type, :date, :amount, :fit_id, :check_number, :sic, :memo, :payee
 
     include MonetarySupport
-    extend MonetaryClassSupport
     monetary_vars :amount
 
     TYPE = {
